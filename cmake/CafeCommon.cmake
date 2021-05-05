@@ -30,12 +30,18 @@ else()
     include(${CMAKE_BINARY_DIR}/conan.cmake)
 
     foreach(_cafe_option ${CAFE_OPTIONS})
-        list(APPEND _cafe_conan_options "${_cafe_option}=${${_cafe_option}}")
+        set(_cafe_option_value ${${_cafe_option}})
+        list(JOIN _cafe_option_value "," _cafe_option_value)
+        string(REPLACE "ON" "True" _cafe_option_value ${_cafe_option_value})
+        string(REPLACE "OFF" "False" _cafe_option_value ${_cafe_option_value})
+        list(APPEND _cafe_conan_options "${_cafe_option}=${_cafe_option_value}")
     endforeach()
+    message(STATUS "_cafe_conan_options is ${_cafe_conan_options}")
     conan_cmake_run(CONANFILE conanfile.py
                     BASIC_SETUP CMAKE_TARGETS
                     BUILD missing
-                    OPTIONS ${_cafe_conan_options})
+                    OPTIONS "${_cafe_conan_options}"
+    )
 endif()
 
 if(CAFE_INCLUDE_TESTS)
