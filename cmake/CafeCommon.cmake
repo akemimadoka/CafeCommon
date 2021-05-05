@@ -36,7 +36,6 @@ else()
         string(REPLACE "OFF" "False" _cafe_option_value ${_cafe_option_value})
         list(APPEND _cafe_conan_options "${_cafe_option}=${_cafe_option_value}")
     endforeach()
-    message(STATUS "_cafe_conan_options is ${_cafe_conan_options}")
     conan_cmake_run(CONANFILE conanfile.py
                     BASIC_SETUP CMAKE_TARGETS
                     BUILD missing
