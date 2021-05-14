@@ -56,3 +56,25 @@ if(BUILD_SHARED_LIBS)
         set(CMAKE_SHARED_LIBRARY_PREFIX "")
     endif()
 endif()
+
+set(CAFE_SHARED_PUBLIC_FLAGS "$<$<C_COMPILER_ID:MSVC>:/utf-8>;$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+set(CAFE_SHARED_INTERFACE_FLAGS)
+set(CAFE_SHARED_PRIVATE_FLAGS)
+
+function(AddCafeSharedFlags target)
+    if(NOT TARGET ${target})
+        message(FATAL_ERROR "No such target: ${target}")
+    endif()
+    get_target_property(_targetType ${target} TYPE)
+    if(_targetType MATCHES ".*INTERFACE_LIBRARY.*")
+        target_compile_options(${target}
+            INTERFACE ${CAFE_SHARED_PUBLIC_FLAGS} ${CAFE_SHARED_INTERFACE_FLAGS}
+        )
+    else()
+        target_compile_options(${target}
+            PUBLIC ${CAFE_SHARED_PUBLIC_FLAGS}
+            INTERFACE ${CAFE_SHARED_INTERFACE_FLAGS}
+            PRIVATE ${CAFE_SHARED_PRIVATE_FLAGS}
+        )
+    endif()
+endfunction()
