@@ -46,7 +46,7 @@ endif()
 if(CAFE_INCLUDE_TESTS)
     include(CTest)
     list(APPEND CMAKE_MODULE_PATH ${CONAN_LIB_DIRS_CATCH2}/cmake/Catch2)
-    include(ParseAndAddCatchTests)
+    include(Catch)
 endif()
 
 add_compile_definitions(CAFE_BUILDING)
