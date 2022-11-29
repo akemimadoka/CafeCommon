@@ -11,7 +11,7 @@ endif()
 set(BUILD_TESTING ${CAFE_INCLUDE_TESTS} CACHE BOOL "Build testing" FORCE)
 
 if(CONAN_EXPORTED)
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS)
 else()
     if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
@@ -45,7 +45,12 @@ endif()
 
 if(CAFE_INCLUDE_TESTS)
     include(CTest)
-    list(APPEND CMAKE_MODULE_PATH ${CONAN_LIB_DIRS_CATCH2}/cmake/Catch2)
+    if(CONAN_CMAKE_MULTI)
+        # 应当与配置无关，仅使用 cmake 脚本
+        list(APPEND CMAKE_MODULE_PATH ${CONAN_BUILD_DIRS_CATCH2_DEBUG})
+    else()
+        list(APPEND CMAKE_MODULE_PATH ${CONAN_BUILD_DIRS_CATCH2})
+    endif()
     include(Catch)
 endif()
 
